@@ -1,6 +1,7 @@
 import requests
 import json
 from workutil.config import API_KEY, MAP_SECTION, HOME_ID, WORK_ID, WorkUtilConfig
+from workutil.utils import color_text
 
 class MyClass():
     def __init__(self, name):
@@ -15,12 +16,25 @@ class GoogleMap():
         self.work = config[MAP_SECTION][WORK_ID]
 
     def from_work_to_home(self):
-        request_url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=place_id:{}&destinations=place_id:{}&key={}"
+        request_url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=place_id:{}&destinations=place_id:{}&departure_time=now&key={}"
         response = requests.get(request_url.format(
             self.work, self.home, self.api_key
         ))
         r = json.loads(response.text)
-        return r['rows'][0]['elements'][0]['duration']['text']
+        duration = r['rows'][0]['elements'][0]['duration']['text']
+        duration_in_traffic = r['rows'][0]['elements'][0]['duration_in_traffic']['text']
+
+        d_float = float(duration.split(" ")[0])
+        dit_float = float(duration_in_traffic.split(" ")[0])
+        if dit_float < d_float * 1.2:
+            color = "GREEN"
+        elif dit_float < d_float * 1.6:
+            color = "YELLOW"
+        else:
+            color = "RED"
+
+        colored_duration = color_text(duration_in_traffic, color, "BOLD")
+        return colored_duration
 
 if __name__ == '__main__':
     gm = GoogleMap()
