@@ -1,13 +1,18 @@
 import requests
 import json
-from workutil.config import API_KEY, MAP_SECTION, HOME_ID, WORK_ID, WorkUtilConfig
+from workutil.config import (
+    API_KEY, MAP_SECTION, HOME_ID, WORK_ID, WorkUtilConfig
+)
 from workutil.utils import color_text
+
 
 class MyClass():
     def __init__(self, name):
         self.name = name
+
     def say_name(self):
         print('name is {}'.format(self.name))
+
 
 class GoogleMap():
     def __init__(self, config=WorkUtilConfig().config):
@@ -21,8 +26,9 @@ class GoogleMap():
             self.work, self.home, self.api_key
         ))
         r = json.loads(response.text)
-        duration = r['rows'][0]['elements'][0]['duration']['text']
-        duration_in_traffic = r['rows'][0]['elements'][0]['duration_in_traffic']['text']
+        info = r['rows'][0]['elements'][0]
+        duration = info['duration']['text']
+        duration_in_traffic = info['duration_in_traffic']['text']
 
         d_float = float(duration.split(" ")[0])
         dit_float = float(duration_in_traffic.split(" ")[0])
@@ -35,6 +41,7 @@ class GoogleMap():
 
         colored_duration = color_text(duration_in_traffic, color, "BOLD")
         return colored_duration
+
 
 if __name__ == '__main__':
     gm = GoogleMap()
