@@ -4,6 +4,8 @@ import configparser
 
 DEFAULT_PATH = op.expanduser("~/.workutil/")
 CONFIG_FILENAME = "config.ini"
+PYTHON_SECTION = "PYTHON"
+PYTHON_ENV = "PYTHON_ENV"
 MAP_SECTION = "MAP"
 API_KEY = "API_KEY"
 HOME_ID = "HOME_ID"

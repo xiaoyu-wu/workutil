@@ -1,6 +1,5 @@
 import sys
-from .classmodule import GoogleMap
-from .funcmodule import *
+from workutil.commute import GoogleMap
 
 
 def main():
